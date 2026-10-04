@@ -1,0 +1,40 @@
+def call () {
+pipeline {
+    agent any
+
+    stages {
+        stage('Example') {
+            // agent {
+            //     label 'mycustomtf'
+            // }
+
+            steps {
+                echo 'Hello World'
+                sh 'hostname'
+               
+               
+            }
+        }
+        stage('terraforminitstage') {
+            agent {
+                label 'mycustomtf'
+            }
+
+            steps { container('mycustomtf-sidecar') {
+                echo 'Hello World'
+                sh 'hostname'
+
+                dir('terraform') {
+                    sh "terraform init"
+                    sh "terraform plan"
+                }
+                
+              
+            }
+            
+        
+        }
+    }
+}
+}
+}
